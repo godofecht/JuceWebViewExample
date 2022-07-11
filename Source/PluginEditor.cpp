@@ -13,16 +13,10 @@
 WebviewexampleAudioProcessorEditor::WebviewexampleAudioProcessorEditor (WebviewexampleAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    
-    
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setOpaque (true);
     
-    si = juce::ScaledImage (myimage, 10.0);
-    
-//    myimage = si.getImage();
-
     // Create an address box..
     addAndMakeVisible (addressTextBox);
     addressTextBox.setTextToShowWhenEmpty ("Enter a web address, e.g. https://www.juce.com", juce::Colours::grey);
@@ -30,7 +24,7 @@ WebviewexampleAudioProcessorEditor::WebviewexampleAudioProcessorEditor (Webviewe
 
     // create the actual browser component
     webView.reset (new DemoBrowserComponent (addressTextBox));
-    addAndMakeVisible (webView.get());
+
 
     // add some buttons..
     addAndMakeVisible (goButton);
@@ -42,22 +36,36 @@ WebviewexampleAudioProcessorEditor::WebviewexampleAudioProcessorEditor (Webviewe
 
     // send the browser to a start page..
     webView->goToURL ("https://www.Collab.collabcollab.io");
+    
+    BackgroundImageComponent.setImage (myimage);
+    
+    BackgroundImageComponent.setImagePlacement (juce::RectanglePlacement::stretchToFit);
+ //   BackgroundImageComponent.setAlwaysOnTop (true);
 
-    setSize (1000, 1000);
+    
+    addAndMakeVisible (webView.get());
+    addAndMakeVisible (BackgroundImageComponent);
+
+
+    setSize (1000, 650);
 }
 
 WebviewexampleAudioProcessorEditor::~WebviewexampleAudioProcessorEditor()
 {
-}
+}   
 
 //==============================================================================
 void WebviewexampleAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::grey);
+    g.fillAll (juce::Colours::black);
  //   g.drawImage (si, 0, 0, getWidth(), getHeight(), 0, 0, getWidth(), getWidth());
-    
-    g.drawImageTransformed (myimage, juce::AffineTransform::scale (1.0 / 5.0f));
+
+}
+
+void WebviewexampleAudioProcessorEditor::paintOverChildren (juce::Graphics& g)
+{
+ //   g.drawImageTransformed (myimage, juce::AffineTransform::scale (1.0 / 5.0f));
 }
 
 void WebviewexampleAudioProcessorEditor::resized()
@@ -66,8 +74,15 @@ void WebviewexampleAudioProcessorEditor::resized()
     // subcomponents in your editor..
     
     int xPos = 100;
-    int yPos = 190;
-    webView->setBounds       (xPos, yPos, getWidth() - xPos * 2, getHeight() - yPos * 2);
+    int yPos = 20; //49;
+    
+    webView->setBounds       (xPos, yPos, getWidth() - xPos * 2 - 1, getHeight() - yPos * 2);
+    
+    BackgroundImageComponent.setBounds (getLocalBounds());
+
+
+    
+//    BackgroundImageComponent.setBounds (getLocalBounds());
 //    goButton      .setBounds (getWidth() - 45, 10, 35, 25);
 //    addressTextBox.setBounds (100, 10, getWidth() - 155, 25);
 //    backButton    .setBounds (10, 10, 35, 25);
